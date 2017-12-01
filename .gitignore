@@ -24,3 +24,7 @@ hs_err_pid*
 # Ignore Eclipse Configuration Files
 .project
 .classpath
+
+# Sensitive Info
+src/Makefile
+src/ip-identifier.txt
