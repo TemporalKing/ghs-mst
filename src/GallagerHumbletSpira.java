@@ -53,6 +53,10 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
         //TODO
     }
     
+    public void report() {
+        //TODO
+    }
+    
     private void println(String message)
     {
         String pidStr = "(" + this.id + ") ";
