@@ -41,6 +41,14 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
         //TODO
     }
     
+    public void sendAccept(int receiveID) {
+        //TODO
+    }
+    
+    public void sendReject(int receiveID) {
+        //TODO
+    }
+    
     public void test() {
         //TODO
     }
