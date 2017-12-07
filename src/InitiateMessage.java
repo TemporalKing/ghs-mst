@@ -19,7 +19,7 @@ public class InitiateMessage implements Message {
         instance.LN = L;
         instance.FN = F;
         instance.SN = S;
-        instance.in_branch = instance.neighbours_weight.get(id);
+        instance.in_branch = id;
         instance.best_edge = GallagerHumbletSpira.BEST_EDGE_NIL;
         instance.best_weight = Integer.MAX_VALUE;
         

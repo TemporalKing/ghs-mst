@@ -26,7 +26,7 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     protected Queue<Message> message_queue; //Message queue
     
     protected HashMap<Integer,Integer> neighbours_status; //Keeps track of neighbours
-    //-1 = not in MST, 0 = unknown, 1 = in MST
+    //0 = not in MST, -1 = unknown, 1 = in MST
     
     protected final HashMap<Integer,Integer> neighbours_weight; //Node ID, weight
 	
