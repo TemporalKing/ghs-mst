@@ -4,6 +4,14 @@ import java.util.Queue;
 
 public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
 
+    public static final int BEST_EDGE_NIL = -1;
+    public static final int IN_MST = 1;
+    public static final int NOT_IN_MST = 0;
+    public static final int UNKNOWN = -1;
+    public static final int STATUS_FIND = 0;
+    public static final int STATUS_FOUND = 1;
+    public static final int STATUS_SLEEPING = -1;
+    
     private int id;
     
     protected int LN; //Level of the current fragment it is part of

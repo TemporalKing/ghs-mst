@@ -8,7 +8,7 @@ public class AcceptMessage implements Message{
     }
     
     public void execute(GallagerHumbletSpira instance) {
-        instance.test_edge = -1;
+        instance.test_edge = GallagerHumbletSpira.BEST_EDGE_NIL;
         
         if(instance.neighbours_weight.get(id) < instance.best_weight) {
             instance.best_edge = id;

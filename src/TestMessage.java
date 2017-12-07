@@ -12,7 +12,7 @@ public class TestMessage implements Message {
     }
     
     public void execute(GallagerHumbletSpira instance) {
-        if(instance.SN == -1) {
+        if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();
         }
         
@@ -22,8 +22,8 @@ public class TestMessage implements Message {
             if(F != instance.FN) {
                 instance.sendAccept(id);
             } else {
-                if(instance.neighbours_status.get(id) == 0) {
-                    instance.neighbours_status.put(id, -1);
+                if(instance.neighbours_status.get(id) == GallagerHumbletSpira.UNKNOWN) {
+                    instance.neighbours_status.put(id, GallagerHumbletSpira.NOT_IN_MST);
                 }
                 
                 if(instance.test_edge != id) {
