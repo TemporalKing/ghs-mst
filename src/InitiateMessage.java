@@ -1,3 +1,4 @@
+
 import java.util.Iterator;
 
 public class InitiateMessage implements Message {

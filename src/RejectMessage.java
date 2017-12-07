@@ -1,4 +1,5 @@
 
+
 public class RejectMessage implements Message{
 
     private int id;

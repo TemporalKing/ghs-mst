@@ -1,4 +1,5 @@
 
+
 public class TestMessage implements Message {
 
     private int id;
