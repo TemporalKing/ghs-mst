@@ -1,5 +1,6 @@
 
 public class ConnectMessage implements Message {
+    
     private int L; //L of sender
     private int id; //id of sender
 
