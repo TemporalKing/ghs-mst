@@ -9,6 +9,10 @@ public class ReportMessage implements Message{
         this.w = w;
     }
 
+    public int getId() {
+        return id;
+    }
+    
     public void execute(GallagerHumbletSpira instance) {
         
     	if(id != instance.in_branch) {
@@ -31,5 +35,4 @@ public class ReportMessage implements Message{
             }
         }
     }
-
 }

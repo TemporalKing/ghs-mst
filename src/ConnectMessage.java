@@ -9,6 +9,10 @@ public class ConnectMessage implements Message {
         this.id = id;
         this.L = L;
     }
+    
+    public int getId() {
+        return id;
+    }    
 
     public void execute(GallagerHumbletSpira instance) {
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {

@@ -3,7 +3,6 @@ import java.util.List;
 import java.util.Queue;
 
 public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
-
     
     public static final int STATUS_FIND = 0;
     public static final int STATUS_FOUND = 1;
@@ -32,21 +31,46 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     public void receiveMessage(Message m) {
         m.execute(this);
     }
-
-    public void wakeUp() {
+    
+    private void sendMessage(Message m) {
         //TODO
     }
     
     public void sendInitiate(int receiveID, int level, int name, int state) {
-        //TODO
+        sendMessage(new InitiateMessage(receiveID, level, name, state));
     }
     
     public void sendAccept(int receiveID) {
-        //TODO
+        sendMessage(new AcceptMessage(receiveID));
     }
     
     public void sendReject(int receiveID) {
-        //TODO
+        sendMessage(new RejectMessage(receiveID));
+    }
+    
+    public void sendChangeRoot(int receiveID) {
+        sendMessage(new ChangeRootMessage(receiveID));
+    }
+    
+    public void sendReport(int receiveID, int best_wt) {
+        sendMessage(new ReportMessage(receiveID, best_wt));
+    }
+    
+    public void sendTest(int receiveID, int level, int name) {
+        sendMessage(new TestMessage(receiveID, level, name));
+    }
+    
+    public void sendConnect(int receiveID, int level) {
+        sendMessage(new ConnectMessage(receiveID, level));
+    }  
+
+    public void wakeUp() {
+        int min_edge_dst = Edge.getMWOE(edges).getDst();
+        Edge.getMWOE(edges).setStatus(Edge.IN_MST);
+        LN = 0;
+        SN = STATUS_FOUND;
+        find_count = 0;
+        sendConnect(min_edge_dst, 0);
     }
     
     public void test() {
@@ -54,7 +78,10 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     }
     
     public void report() {
-        //TODO
+        if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
+            SN = STATUS_FOUND;
+            sendReport(in_branch, best_edge.getWeight());
+        }
     }
     
     public void change_root() {

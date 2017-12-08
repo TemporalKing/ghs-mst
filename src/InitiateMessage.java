@@ -14,13 +14,17 @@ public class InitiateMessage implements Message {
         this.F = F;
         this.S = S;
     }
+
+    public int getId() {
+        return id;
+    }
     
     public void execute(GallagerHumbletSpira instance) {
         instance.LN = L;
         instance.FN = F;
         instance.SN = S;
         instance.in_branch = id;
-        instance.best_edge = new Edge(Edge.BEST_EDGE_NIL, Integer.MAX_VALUE);
+        instance.best_edge = new Edge(Edge.EDGE_NIL, Integer.MAX_VALUE);
         
         for (Edge adjacent_edge : instance.edges)
         {

@@ -12,6 +12,10 @@ public class TestMessage implements Message {
         this.F = F;
     }
     
+    public int getId() {
+        return id;
+    }
+    
     public void execute(GallagerHumbletSpira instance) {
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();

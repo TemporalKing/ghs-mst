@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Edge {
 	
-	public static final int BEST_EDGE_NIL = -1;
+	public static final int EDGE_NIL = -1;
     public static final int IN_MST = 1;
     public static final int NOT_IN_MST = 0;
     public static final int UNKNOWN = -1;
