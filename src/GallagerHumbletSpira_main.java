@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.rmi.RMISecurityManager;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +15,9 @@ public class GallagerHumbletSpira_main {
 
 	/**
 	 * @param args
+	 * @throws RemoteException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RemoteException {
 		
 		// Localhost IP
 		String localhost = System.getProperty("java.rmi.server.hostname");
