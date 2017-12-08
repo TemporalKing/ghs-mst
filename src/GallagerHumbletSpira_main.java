@@ -127,11 +127,19 @@ public class GallagerHumbletSpira_main {
 				// Create the node on the localhost
 				List<Edge> edges = topologyMap.get(node_id);
 				System.out.println("Node: " + node_id);
+				
+				HashMap<Integer, String> ip_LUT = new HashMap<Integer, String>();
 				for (Edge e: edges)
 				{
 					System.out.println(e.toString());
+					
+					int dst = e.getDst();
+					int dst_ip_id = nodeMap.get(dst);
+					String dst_ip = ipMap.get(dst_ip_id);
+					
+					ip_LUT.put(dst, dst_ip);
 				}
-				GallagerHumbletSpira ghs = new GallagerHumbletSpira(node_id, edges);
+				GallagerHumbletSpira ghs = new GallagerHumbletSpira(node_id, edges, ip_LUT);
 				helloWorld = ghs;
 			}
 		}
