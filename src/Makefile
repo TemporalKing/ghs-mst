@@ -1,5 +1,5 @@
 run:
-	java -Djava.security.policy=my.policy -Djava.rmi.server.hostname=X.X.X.X GallagerHumbletSpira_main
+	java -Djava.security.policy=my.policy -Djava.rmi.server.hostname=127.0.0.1 GallagerHumbletSpira_main
 
 clean:
 	rm *.class

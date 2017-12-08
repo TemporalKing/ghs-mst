@@ -23,8 +23,9 @@ public class TestMessage implements Message {
             if(F != instance.FN) {
                 instance.sendAccept(id);
             } else {
-                if(instance.neighbours_status.get(id) == GallagerHumbletSpira.UNKNOWN) {
-                    instance.neighbours_status.put(id, GallagerHumbletSpira.NOT_IN_MST);
+            	Edge senderEdge = Edge.getEdge(instance.edges, id);
+                if(senderEdge.getStatus() == Edge.UNKNOWN) {
+                    senderEdge.setStatus(Edge.NOT_IN_MST);
                 }
                 
                 if(instance.test_edge != id) {

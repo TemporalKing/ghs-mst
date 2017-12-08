@@ -9,8 +9,9 @@ public class RejectMessage implements Message{
     }
 
     public void execute(GallagerHumbletSpira instance) {
-        if(instance.neighbours_status.get(id) == GallagerHumbletSpira.UNKNOWN) {
-            instance.neighbours_status.put(id, GallagerHumbletSpira.NOT_IN_MST);
+    	Edge senderEdge = Edge.getEdge(instance.edges, id);
+        if(senderEdge.getStatus() == Edge.UNKNOWN) {
+        	senderEdge.setStatus(Edge.NOT_IN_MST);
         }
         instance.test();
     }

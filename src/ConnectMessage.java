@@ -14,18 +14,18 @@ public class ConnectMessage implements Message {
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();
         }
-        
+        Edge senderEdge = Edge.getEdge(instance.edges, id);
         if(L < instance.LN) {
-            instance.neighbours_status.put(id, GallagerHumbletSpira.IN_MST);
+            senderEdge.setStatus(Edge.IN_MST);
             instance.sendInitiate(id, instance.LN, instance.FN, instance.SN);
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
                 instance.find_count++;
             }
         } else {
-            if(instance.neighbours_status.get(id) == GallagerHumbletSpira.UNKNOWN) {
+            if(senderEdge.getStatus() == Edge.UNKNOWN) {
                 instance.message_queue.add(this);
             } else {
-                instance.sendInitiate(id, instance.LN + 1, instance.neighbours_weight.get(id), 0);
+                instance.sendInitiate(id, instance.LN + 1, senderEdge.getWeight(), GallagerHumbletSpira.STATUS_FIND);
             }
         }
     }

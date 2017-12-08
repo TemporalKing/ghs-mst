@@ -9,11 +9,11 @@ public class AcceptMessage implements Message{
     }
     
     public void execute(GallagerHumbletSpira instance) {
-        instance.test_edge = GallagerHumbletSpira.BEST_EDGE_NIL;
+        instance.test_edge = Edge.BEST_EDGE_NIL;
         
-        if(instance.neighbours_weight.get(id) < instance.best_weight) {
-            instance.best_edge = id;
-            instance.best_weight = instance.neighbours_weight.get(id);
+        Edge senderEdge = Edge.getEdge(instance.edges, id);
+        if(senderEdge.getWeight() < instance.best_edge.getWeight()) {
+            instance.best_edge = senderEdge;
         }
         
         instance.report();

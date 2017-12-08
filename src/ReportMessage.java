@@ -10,21 +10,21 @@ public class ReportMessage implements Message{
     }
 
     public void execute(GallagerHumbletSpira instance) {
-        if(id != instance.in_branch) {
+        
+    	if(id != instance.in_branch) {
             instance.find_count--;
-            if(w < instance.best_weight) {
-                instance.best_weight = w;
-                instance.best_edge = id;
+            if(w < instance.best_edge.getWeight()) {
+            	instance.best_edge = new Edge(id, w);
             }
             instance.report();
         } else {
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
                 instance.message_queue.add(this);
             } else {
-                if(w > instance.best_weight) {
+                if(w > instance.best_edge.getWeight()) {
                     instance.change_root();
                 } else {
-                    if(w == instance.best_weight && w == Integer.MAX_VALUE) {
+                    if(w == instance.best_edge.getWeight() && w == Integer.MAX_VALUE) {
                         instance.halt();
                     }
                 }
