@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -10,6 +11,7 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     public static final int STATUS_SLEEPING = -1;
     
     private int id;
+    private HashMap<Integer, String> ip_LUT;
     
     protected int LN; //Level of the current fragment it is part of
     protected int FN; //Name of the current fragment it is part of
@@ -23,10 +25,12 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     
     protected List<Edge> edges; //Keeps track of edges
     	
-    public GallagerHumbletSpira(int id, List<Edge> edges) {
+    public GallagerHumbletSpira(int id, List<Edge> edges, HashMap<Integer, String> ip_LUT) {
         this.id = id;
         this.edges = edges;
         this.message_queue = new LinkedList<Message>();
+        this.ip_LUT = ip_LUT;
+        
     }
     
     public void receiveMessage(Message m) {
@@ -63,13 +67,25 @@ public class GallagerHumbletSpira implements GallagerHumbletSpira_RMI{
     
     public void halt() {
         //TODO
+    	synchronized(System.err){
+    		println("*******************************");
+    		println("Node " + id);
+    		for (Edge adjacent_edge: edges)
+    		{
+    			if(adjacent_edge.getStatus() == Edge.IN_MST)
+    				println (adjacent_edge.toString());
+    		}
+    		println("################################");
+    	}
     }
     
-    @SuppressWarnings("unused")
 	private void println(String message)
     {
+    	
         String pidStr = "(" + this.id + ") ";
+        synchronized(System.err){
         System.err.println(pidStr + message);
+        }
     }
     
 }
