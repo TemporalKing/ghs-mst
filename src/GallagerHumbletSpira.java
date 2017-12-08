@@ -128,7 +128,13 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void change_root() {
-        //TODO
+        if(best_edge.getStatus() == Edge.IN_MST) {
+            sendChangeRoot(best_edge.getDst());
+        } else {
+            sendConnect(best_edge.getDst(), LN);
+            Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
+            best_edge.setStatus(Edge.IN_MST);
+        }
     }
     
     public void halt() {
