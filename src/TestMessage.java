@@ -20,8 +20,9 @@ public class TestMessage implements Message {
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();
         }
-        
+        instance.println(String.format("Test Message Executing"));
         if(L > instance.LN) {
+        	instance.println("Adding test message to queue");
             instance.message_queue.add(this);
         } else {
             if(F != instance.FN) {
@@ -33,6 +34,7 @@ public class TestMessage implements Message {
                 }
                 
                 if(instance.test_edge != id) {
+//                	instance.println(String.format("Hello... id: %d, instance_id: %d", id, instance.id ));
                     instance.sendReject(id);
                 } else {
                     instance.test();

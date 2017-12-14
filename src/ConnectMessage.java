@@ -19,7 +19,10 @@ public class ConnectMessage implements Message {
             instance.wakeUp();
         }
         Edge senderEdge = Edge.getEdge(instance.edges, id);
+        instance.println("Entered Connect Message Execute: " + id);
         if(L < instance.LN) {
+        	// Absorb
+        	instance.println("Absorb " + id);
             senderEdge.setStatus(Edge.IN_MST);
             instance.sendInitiate(id, instance.LN, instance.FN, instance.SN);
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
@@ -27,8 +30,11 @@ public class ConnectMessage implements Message {
             }
         } else {
             if(senderEdge.getStatus() == Edge.UNKNOWN) {
+            	instance.println("Added connect message to queue");
                 instance.message_queue.add(this);
             } else {
+            	// Merge
+            	instance.println("Merge " + id);
                 instance.sendInitiate(id, instance.LN + 1, senderEdge.getWeight(), GallagerHumbletSpira.STATUS_FIND);
             }
         }

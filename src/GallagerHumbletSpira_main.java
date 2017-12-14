@@ -142,7 +142,8 @@ public class GallagerHumbletSpira_main {
 					ip_LUT.put(dst, dst_ip);
 				}
 				GallagerHumbletSpira ghs = new GallagerHumbletSpira(node_id, edges, ip_LUT);
-				helloWorld = ghs;
+				if (node_id ==1)
+					helloWorld = ghs;
 			}
 		}
 		
@@ -155,7 +156,7 @@ public class GallagerHumbletSpira_main {
         System.out.println("Finding MST using Gallager Humblet Spira Algorithm");
         
 		// TODO Wake some random nodes
-        if (helloWorld != null)
+        if (helloWorld != null && helloWorld.SN == GallagerHumbletSpira.STATUS_SLEEPING)
         	helloWorld.wakeUp();
 	}
 

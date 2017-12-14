@@ -17,7 +17,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     public static final int STATUS_FOUND = 1;
     public static final int STATUS_SLEEPING = -1;
     
-    private int id;
+    public int id; //TODO
     private HashMap<Integer, String> ip_LUT;
     
     protected int LN; //Level of the current fragment it is part of
@@ -38,6 +38,8 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
         this.message_queue = new LinkedList<Message>();
         this.ip_LUT = ip_LUT;
         
+        this.best_edge = new Edge(Edge.EDGE_NIL, Integer.MAX_VALUE);
+        
         bind();
     }
     
@@ -56,12 +58,15 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void receiveMessage(Message m) {
+//    	println("Entered receive");
         m.execute(this);
+//        println("Exited receive");
     }
     
     private void sendMessage(int destination, Message m) {
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
         println("sent " + m.getClass() + " to: " + destName);
+        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
         try {
             GallagerHumbletSpira_RMI dest = (GallagerHumbletSpira_RMI) Naming.lookup(destName);
             dest.receiveMessage(m);
@@ -90,6 +95,10 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     
     public void sendReport(int receiveID, int best_wt) {
         sendMessage(receiveID, new ReportMessage(id, best_wt));
+        if (best_wt == Integer.MAX_VALUE)
+        	print_in_branches();
+        check_queue();
+        
     }
     
     public void sendTest(int receiveID, int level, int name) {
@@ -128,16 +137,17 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void change_root() {
+    	println("Change Root");
         if(best_edge.getStatus() == Edge.IN_MST) {
             sendChangeRoot(best_edge.getDst());
         } else {
             sendConnect(best_edge.getDst(), LN);
             Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
-            best_edge.setStatus(Edge.IN_MST);
+//            best_edge.setStatus(Edge.IN_MST);
         }
     }
     
-    public void halt() {
+    public void print_in_branches() {
         //TODO
     	synchronized(System.err){
     		println("*******************************");
@@ -147,11 +157,31 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     			if(adjacent_edge.getStatus() == Edge.IN_MST)
     				println (adjacent_edge.toString());
     		}
+    		println("Message Queue Size: "+message_queue.size());
     		println("################################");
     	}
     }
     
-	private void println(String message)
+    public void change_level(int L)
+    {
+    	println("changing level");
+    	LN = L;
+    	
+    	check_queue();
+    }
+    
+    public void check_queue()
+    {
+    	// Check queue
+    	int queue_size = message_queue.size();
+    	for (int i = 0; i < queue_size; i++)
+    	{
+    		Message m = message_queue.remove();
+    		m.execute(this);
+    	}
+    }
+    
+	public void println(String message)
     {
     	
         String pidStr = "(" + this.id + ") ";

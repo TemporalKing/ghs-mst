@@ -20,16 +20,19 @@ public class ReportMessage implements Message{
             if(w < instance.best_edge.getWeight()) {
             	instance.best_edge = new Edge(id, w);
             }
+
             instance.report();
         } else {
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
+            	instance.println("Added report message to queue");
                 instance.message_queue.add(this);
             } else {
                 if(w > instance.best_edge.getWeight()) {
                     instance.change_root();
                 } else {
                     if(w == instance.best_edge.getWeight() && w == Integer.MAX_VALUE) {
-                        instance.halt();
+                        // HALT
+                    	instance.println("HALT");
                     }
                 }
             }

@@ -65,6 +65,7 @@ public class Edge {
 			if (e.getDst() == dst)
 				return e;
 		}
+		System.out.println("getEdge() returned null");
 		return null;
 	}
 }

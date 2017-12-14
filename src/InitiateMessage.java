@@ -20,10 +20,12 @@ public class InitiateMessage implements Message {
     }
     
     public void execute(GallagerHumbletSpira instance) {
-        instance.LN = L;
+        
+//        instance.LN = L;
         instance.FN = F;
         instance.SN = S;
         instance.in_branch = id;
+        instance.change_level(L);
         instance.best_edge = new Edge(Edge.EDGE_NIL, Integer.MAX_VALUE);
         
         for (Edge adjacent_edge : instance.edges)
