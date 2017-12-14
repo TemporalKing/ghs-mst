@@ -64,12 +64,21 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     private void sendMessage(int destination, Message m) {
+        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
         println("sent " + m.getClass() + " to: " + destName);
-        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
         try {
             GallagerHumbletSpira_RMI dest = (GallagerHumbletSpira_RMI) Naming.lookup(destName);
-            dest.receiveMessage(m);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        dest.receiveMessage(m);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
@@ -109,14 +118,14 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
         sendMessage(receiveID, new ConnectMessage(id, level));
     }  
 
-    public void wakeUp() {
-        println("Woke up");
+    public void wakeUp() {        
         int min_edge_dst = Edge.getMWOE(edges).getDst();
         Edge.getMWOE(edges).setStatus(Edge.IN_MST);
         LN = 0;
         SN = STATUS_FOUND;
         find_count = 0;
         sendConnect(min_edge_dst, LN);
+        println("Woke up");
     }
     
     public void test() {
