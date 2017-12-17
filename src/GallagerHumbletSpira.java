@@ -17,6 +17,16 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     public static final int STATUS_FOUND = 1;
     public static final int STATUS_SLEEPING = -1;
     
+    // number of each type of message sent
+    private int initiate_count = 0;
+    private int report_count = 0;
+    private int accept_count = 0;
+    private int reject_count = 0;
+    private int connect_count = 0;
+    private int change_root_count = 0;
+    private int test_count = 0;
+    
+    
     public int id; //TODO
     private HashMap<Integer, String> ip_LUT;
     
@@ -101,30 +111,37 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void sendInitiate(int receiveID, int level, int name, int state) {
+    	initiate_count++;
         sendMessage(receiveID, new InitiateMessage(id, level, name, state));
     }
     
     public void sendAccept(int receiveID) {
+    	accept_count++;
         sendMessage(receiveID, new AcceptMessage(id));
     }
     
     public void sendReject(int receiveID) {
+    	reject_count++;
         sendMessage(receiveID, new RejectMessage(id));
     }
     
     public void sendChangeRoot(int receiveID) {
+    	change_root_count++;
         sendMessage(receiveID, new ChangeRootMessage(id));
     }
     
     public void sendReport(int receiveID, int best_wt) {
+    	report_count++;
         sendMessage(receiveID, new ReportMessage(id, best_wt));        
     }
     
     public void sendTest(int receiveID, int level, int name) {
+    	test_count++;
         sendMessage(receiveID, new TestMessage(id, level, name));
     }
     
     public void sendConnect(int receiveID, int level) {
+    	connect_count++;
         sendMessage(receiveID, new ConnectMessage(id, level));
     }  
     
@@ -185,6 +202,13 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     				println (adjacent_edge.toString());
     		}
     		println("Message Queue Size: "+message_queue.size());
+    		println("Accept Message Count: " + accept_count);
+    		println("ChangeRoot Message Count: " + change_root_count);
+    		println("Connect Message Count: " + connect_count);
+    		println("Initiate Message Count: " + initiate_count);
+    		println("Reject Message Count: " + reject_count);
+    		println("Report Message Count: " + report_count);
+    		println("Test Message Count: " + test_count);
     		println("################################");
     	}
     }

@@ -34,6 +34,7 @@ public class ReportMessage implements Message{
                     if(w == instance.best_edge.getWeight() && w == Integer.MAX_VALUE) {
                         // HALT
                     	instance.println("HALT");
+                    	instance.println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", instance.LN, instance.FN, instance.SN, instance.in_branch));
                     	new TerminateMessage(instance.id).execute(instance);
                     }
                 }
