@@ -19,6 +19,15 @@ public class GallagerHumbletSpira_main {
 	 */
 	public static void main(String[] args) throws RemoteException {
 		
+		// First argument is the network topology and 2nd is the node location file
+		if (args.length != 2)
+		{
+			System.out.println("1st argument is the network topology and 2nd is the node location file");
+			System.exit(1);
+		}
+		String network_topology_filename = args[0];
+		String node_location_filename = args[1];		
+		
 		// Localhost IP
 		String localhost = System.getProperty("java.rmi.server.hostname");
 
@@ -30,9 +39,9 @@ public class GallagerHumbletSpira_main {
 		try {
 			FileReader nodeFile, ipFile, topologyFile;
 			
-			nodeFile = new FileReader("node-location.txt");
+			nodeFile = new FileReader(node_location_filename);
 			ipFile = new FileReader("ip-identifier.txt");
-			topologyFile = new FileReader("network-topology.txt");
+			topologyFile = new FileReader(network_topology_filename);
 			
 			BufferedReader nodeReader, ipReader, topologyReader;
 			
