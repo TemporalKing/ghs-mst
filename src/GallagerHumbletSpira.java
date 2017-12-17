@@ -57,18 +57,32 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
         }
     }
     
-    public void receiveMessage(Message m) {
-//    	println("Entered receive");
-        m.execute(this);
-//        println("Exited receive");
+    public synchronized void receiveMessage(Message m) {
+    	Edge sourceEdge = Edge.getEdge(edges, m.getId());
+    	if (sourceEdge.getLastReceived()+1 == m.getMessageCounter())
+    	{
+    		sourceEdge.incrementLastReceived();
+    		m.execute(this);
+            check_queue();
+    	}
+    	else
+    	{
+    		message_queue.add(m);
+    	}
     }
     
     private void sendMessage(int destination, Message m) {
-        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
+//        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
         println("sent " + m.getClass() + " to: " + destName);
+        
+        Edge destEdge = Edge.getEdge(edges, destination);
+        destEdge.incrementLastSent();
+        m.setMessageCounter(destEdge.getLastSent());
+        
         try {
             GallagerHumbletSpira_RMI dest = (GallagerHumbletSpira_RMI) Naming.lookup(destName);
+            
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -103,11 +117,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void sendReport(int receiveID, int best_wt) {
-        sendMessage(receiveID, new ReportMessage(id, best_wt));
-        if (best_wt == Integer.MAX_VALUE)
-        	print_in_branches();
-        check_queue();
-        
+        sendMessage(receiveID, new ReportMessage(id, best_wt));        
     }
     
     public void sendTest(int receiveID, int level, int name) {
@@ -117,15 +127,20 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     public void sendConnect(int receiveID, int level) {
         sendMessage(receiveID, new ConnectMessage(id, level));
     }  
-
+    
+    public void sendTerminate(int dest)
+    {
+    	sendMessage(dest, new TerminateMessage(this.id));
+    }
+    
     public void wakeUp() {        
+    	println("Woke up");
         int min_edge_dst = Edge.getMWOE(edges).getDst();
         Edge.getMWOE(edges).setStatus(Edge.IN_MST);
         LN = 0;
         SN = STATUS_FOUND;
         find_count = 0;
         sendConnect(min_edge_dst, LN);
-        println("Woke up");
     }
     
     public void test() {
@@ -139,19 +154,22 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-        if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
+    	
+    	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
             sendReport(in_branch, best_edge.getWeight());
+            check_queue();
         }
     }
     
     public void change_root() {
     	println("Change Root");
-        if(best_edge.getStatus() == Edge.IN_MST) {
-            sendChangeRoot(best_edge.getDst());
+    	Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
+        if(my_best_edge.getStatus() == Edge.IN_MST) {
+            sendChangeRoot(my_best_edge.getDst());
         } else {
-            sendConnect(best_edge.getDst(), LN);
-            Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
+            sendConnect(my_best_edge.getDst(), LN);
+            Edge.getEdge(edges, my_best_edge.getDst()).setStatus(Edge.IN_MST);
 //            best_edge.setStatus(Edge.IN_MST);
         }
     }
@@ -171,25 +189,28 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     	}
     }
     
-    public void change_level(int L)
-    {
-    	println("changing level");
-    	LN = L;
-    	
-    	check_queue();
-    }
-    
     public void check_queue()
     {
     	// Check queue
     	int queue_size = message_queue.size();
+    
     	for (int i = 0; i < queue_size; i++)
     	{
     		Message m = message_queue.remove();
-    		m.execute(this);
+    		Edge sourceEdge = Edge.getEdge(edges, m.getId());
+        	if (sourceEdge.getLastReceived()+1 >= m.getMessageCounter())
+        	{
+        		m.execute(this);
+        		if (sourceEdge.getLastReceived()+1 == m.getMessageCounter())
+        			sourceEdge.incrementLastReceived();
+        	}
+        	else
+        	{
+        		message_queue.add(m);
+        	}
     	}
     }
-    
+        
 	public void println(String message)
     {
     	

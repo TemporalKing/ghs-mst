@@ -11,10 +11,33 @@ public class Edge {
 	private final int dst, weight;
 	private int status = UNKNOWN;
 	
+	private int last_received = 0;
+	private int last_sent = 0;
+	
 	Edge (int dst, int weight)
 	{
 		this.dst = dst;
 		this.weight = weight;
+	}
+	
+	public int getLastReceived()
+	{
+		return last_received;
+	}
+	
+	public int getLastSent()
+	{
+		return last_sent;
+	}
+	
+	public void incrementLastSent()
+	{
+		last_sent++;
+	}
+	
+	public void incrementLastReceived()
+	{
+		last_received++;
 	}
 	
 	public int getDst()

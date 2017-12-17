@@ -4,6 +4,7 @@ public class ConnectMessage implements Message {
     
     private int L; //L of sender
     private int id; //id of sender
+    private int counter;
 
     public ConnectMessage(int id, int L) {
         this.id = id;
@@ -15,11 +16,11 @@ public class ConnectMessage implements Message {
     }    
 
     public void execute(GallagerHumbletSpira instance) {
+
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();
         }
         Edge senderEdge = Edge.getEdge(instance.edges, id);
-        instance.println("Entered Connect Message Execute: " + id);
         if(L < instance.LN) {
         	// Absorb
         	instance.println("Absorb " + id);
@@ -30,7 +31,7 @@ public class ConnectMessage implements Message {
             }
         } else {
             if(senderEdge.getStatus() == Edge.UNKNOWN) {
-            	instance.println("Added connect message to queue");
+            	instance.println(String.format("Added CONNECT %d message to queue", id));
                 instance.message_queue.add(this);
             } else {
             	// Merge
@@ -39,4 +40,16 @@ public class ConnectMessage implements Message {
             }
         }
     }
+    
+    @Override
+	public int getMessageCounter() {
+		// TODO Auto-generated method stub
+		return counter;
+	}
+	
+	@Override
+	public void setMessageCounter(int counter) {
+		// TODO Auto-generated method stub
+		this.counter = counter;
+	}
 }

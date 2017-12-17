@@ -3,6 +3,7 @@ public class ReportMessage implements Message{
     
     private int id;
     private int w;
+    private int counter;
     
     public ReportMessage(int id, int w) {
         this.id = id;
@@ -24,7 +25,7 @@ public class ReportMessage implements Message{
             instance.report();
         } else {
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
-            	instance.println("Added report message to queue");
+            	instance.println(String.format("Added REPORT %d message to queue", id));
                 instance.message_queue.add(this);
             } else {
                 if(w > instance.best_edge.getWeight()) {
@@ -33,9 +34,22 @@ public class ReportMessage implements Message{
                     if(w == instance.best_edge.getWeight() && w == Integer.MAX_VALUE) {
                         // HALT
                     	instance.println("HALT");
+                    	new TerminateMessage(instance.id).execute(instance);
                     }
                 }
             }
         }
     }
+
+	@Override
+	public int getMessageCounter() {
+		// TODO Auto-generated method stub
+		return counter;
+	}
+	
+	@Override
+	public void setMessageCounter(int counter) {
+		// TODO Auto-generated method stub
+		this.counter = counter;
+	}
 }

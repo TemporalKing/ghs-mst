@@ -3,6 +3,7 @@
 public class RejectMessage implements Message{
 
     private int id;
+    private int counter;
     
     public RejectMessage(int id) {
         this.id = id;
@@ -19,5 +20,17 @@ public class RejectMessage implements Message{
         }
         instance.test();
     }
+    
+    @Override
+	public int getMessageCounter() {
+		// TODO Auto-generated method stub
+		return counter;
+	}
+	
+	@Override
+	public void setMessageCounter(int counter) {
+		// TODO Auto-generated method stub
+		this.counter = counter;
+	}
 
 }

@@ -5,6 +5,7 @@ public class TestMessage implements Message {
     private int id;
     private int L;
     private int F;
+    private int counter;
     
     public TestMessage(int id, int L, int F) {
         this.id = id;
@@ -22,7 +23,7 @@ public class TestMessage implements Message {
         }
         instance.println(String.format("Test Message Executing"));
         if(L > instance.LN) {
-        	instance.println("Adding test message to queue");
+        	instance.println(String.format("Adding TEST %d message to queue", id));
             instance.message_queue.add(this);
         } else {
             if(F != instance.FN) {
@@ -34,7 +35,6 @@ public class TestMessage implements Message {
                 }
                 
                 if(instance.test_edge != id) {
-//                	instance.println(String.format("Hello... id: %d, instance_id: %d", id, instance.id ));
                     instance.sendReject(id);
                 } else {
                     instance.test();
@@ -42,5 +42,17 @@ public class TestMessage implements Message {
             }
         }
     }
+    
+    @Override
+	public int getMessageCounter() {
+		// TODO Auto-generated method stub
+		return counter;
+	}
+	
+	@Override
+	public void setMessageCounter(int counter) {
+		// TODO Auto-generated method stub
+		this.counter = counter;
+	}
 
 }
