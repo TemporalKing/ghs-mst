@@ -25,7 +25,7 @@ public class ReportMessage implements Message{
             instance.report();
         } else {
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
-            	instance.println(String.format("Added REPORT %d message to queue", id));
+            	instance.println(String.format("Added REPORT %d.%d message to queue", this.getId(), this.getMessageCounter()));
                 instance.message_queue.add(this);
             } else {
                 if(w > instance.best_edge.getWeight()) {

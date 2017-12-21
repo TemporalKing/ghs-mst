@@ -31,7 +31,7 @@ public class ConnectMessage implements Message {
             }
         } else {
             if(senderEdge.getStatus() == Edge.UNKNOWN) {
-            	instance.println(String.format("Added CONNECT %d message to queue", id));
+            	instance.println(String.format("Added CONNECT %d.%d message to queue", this.getId(), this.getMessageCounter()));
                 instance.message_queue.add(this);
             } else {
             	// Merge

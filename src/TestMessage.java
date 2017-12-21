@@ -23,7 +23,7 @@ public class TestMessage implements Message {
         }
         instance.println(String.format("Test Message Executing"));
         if(L > instance.LN) {
-        	instance.println(String.format("Adding TEST %d message to queue", id));
+        	instance.println(String.format("Adding TEST %d.%d message to queue", this.getId(), this.getMessageCounter()));
             instance.message_queue.add(this);
         } else {
             if(F != instance.FN) {

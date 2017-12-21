@@ -68,7 +68,10 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public synchronized void receiveMessage(Message m) {
+    	println(String.format("Received message %d.%d of type %s", m.getId(), m.getMessageCounter(), m.getClass()));
+    	
     	Edge sourceEdge = Edge.getEdge(edges, m.getId());
+    
     	if (sourceEdge.getLastReceived()+1 == m.getMessageCounter())
     	{
     		sourceEdge.incrementLastReceived();
@@ -77,18 +80,21 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     	}
     	else
     	{
+    		println(String.format("Buffering message %d.%d", m.getId(), m.getMessageCounter()));
     		message_queue.add(m);
     	}
     }
     
     private void sendMessage(int destination, Message m) {
 //        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
+    	
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
-        println("sent " + m.getClass() + " to: " + destName);
         
         Edge destEdge = Edge.getEdge(edges, destination);
         destEdge.incrementLastSent();
         m.setMessageCounter(destEdge.getLastSent());
+        
+        println(String.format("Sent message %d.%d of type %s to %d", m.getId(), m.getMessageCounter(), m.getClass(), destination));
         
         try {
             GallagerHumbletSpira_RMI dest = (GallagerHumbletSpira_RMI) Naming.lookup(destName);
@@ -97,8 +103,9 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
                 @Override
                 public void run() {
                     try {
+                    	Thread.sleep((int)(Math.random()*2000));
                         dest.receiveMessage(m);
-                    } catch (RemoteException e) {
+                    } catch (RemoteException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -240,7 +247,10 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     	
         String pidStr = "(" + this.id + ") ";
         synchronized(System.err){
-        System.err.println(pidStr + message);
+        	System.err.println(pidStr + message);
+        }
+        synchronized(System.out){
+            System.out.println(pidStr + message);
         }
     }
     

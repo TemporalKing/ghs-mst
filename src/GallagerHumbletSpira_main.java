@@ -22,7 +22,7 @@ public class GallagerHumbletSpira_main {
 		// First argument is the network topology and 2nd is the node location file
 		if (args.length != 2)
 		{
-			System.out.println("1st argument is the network topology and 2nd is the node location file");
+			System.err.println("1st argument is the network topology and 2nd is the node location file");
 			System.exit(1);
 		}
 		String network_topology_filename = args[0];
@@ -137,7 +137,7 @@ public class GallagerHumbletSpira_main {
 			{
 				// Create the node on the localhost
 				List<Edge> edges = topologyMap.get(node_id);
-				System.out.println("Node: " + node_id);
+				System.err.println("Node: " + node_id);
 				
 				HashMap<Integer, String> ip_LUT = new HashMap<Integer, String>();
 				for (Edge e: edges)
@@ -158,11 +158,11 @@ public class GallagerHumbletSpira_main {
 		
 		
 		// Pause execution until entire network is up and running
-		System.out.println("Press enter to continue");
+		System.err.println("Press enter to continue");
         Scanner scan = new Scanner(System.in);
         scan.nextLine();
         scan.close();
-        System.out.println("Finding MST using Gallager Humblet Spira Algorithm");
+        System.err.println("Finding MST using Gallager Humblet Spira Algorithm");
         
 		// TODO Wake some random nodes
         if (helloWorld != null && helloWorld.SN == GallagerHumbletSpira.STATUS_SLEEPING)
