@@ -42,6 +42,8 @@ public class InitiateMessage implements Message {
         if(S == GallagerHumbletSpira.STATUS_FIND) {
             instance.test();
         }
+        
+        System.out.println(String.format("Level %d, Fragment Name %d", instance.LN, instance.FN));
     }
     
     @Override

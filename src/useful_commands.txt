@@ -1,0 +1,4 @@
+grep -i merge temp.txt | wc --lines
+grep -i absorb temp.txt | wc --lines
+
+grep -i "message count" temp.txt | sort --unique
