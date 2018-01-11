@@ -164,7 +164,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
         LN = 0;
         SN = STATUS_FOUND;
         find_count = 0;
-        sendConnect(min_edge_dst, LN);
+        sendConnect(min_edge_dst, 0);
     }
     
     public void test() {
@@ -178,8 +178,8 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-    	println("fc: " + find_count);
-    	println("test_edge: " + test_edge);
+//    	println("fc: " + find_count);
+//    	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
             sendReport(in_branch, best_edge.getWeight());
@@ -190,16 +190,19 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     public void change_root() {
     	println("Change Root");
     	
-		println("BEST_EDGE: " + best_edge.getDst());
-		println("Edges len: " + edges.size());
+//		println("BEST_EDGE: " + best_edge.getDst());
+//		println("Edges len: " + edges.size());
 //		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
-		
-		if(best_edge.getStatus() == Edge.IN_MST) {
-		    sendChangeRoot(best_edge.getDst());
+    	Edge temp = Edge.getEdge(edges, best_edge.getDst());
+//    	println(best_edge.toString());
+//    	println(Integer.toString(best_edge.getStatus()));
+    	
+		if(temp.getStatus() == Edge.IN_MST) {
+		    sendChangeRoot(temp.getDst());
 		} else {
-		    sendConnect(best_edge.getDst(), LN);
-		    Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
-		    best_edge.setStatus(Edge.IN_MST);
+		    sendConnect(temp.getDst(), LN);
+		    Edge.getEdge(edges, temp.getDst()).setStatus(Edge.IN_MST);
+		    temp.setStatus(Edge.IN_MST);
 		}
 		
     	
@@ -256,9 +259,9 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     {
     	
         String pidStr = "(" + this.id + ") ";
-        synchronized(System.err){
-        	System.err.println(pidStr + message);
-        }
+//        synchronized(System.err){
+//        	System.err.println(pidStr + message);
+//        }
         synchronized(System.out){
             System.out.println(pidStr + message);
         }

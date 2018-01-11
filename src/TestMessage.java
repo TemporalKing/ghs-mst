@@ -21,7 +21,9 @@ public class TestMessage implements Message {
         if(instance.SN == GallagerHumbletSpira.STATUS_SLEEPING) {
             instance.wakeUp();
         }
+        
         instance.println(String.format("Test Message Executing"));
+        
         if(L > instance.LN) {
         	instance.println(String.format("Adding TEST %d.%d message to queue", this.getId(), this.getMessageCounter()));
             instance.message_queue.add(this);
