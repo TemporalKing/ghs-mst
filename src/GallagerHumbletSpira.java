@@ -194,6 +194,9 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
 //		println("Edges len: " + edges.size());
 //		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
     	Edge temp = Edge.getEdge(edges, best_edge.getDst());
+    	if (temp == null) {
+    		println("Best edge dest:" + best_edge.getDst());
+    	}
 //    	println(best_edge.toString());
 //    	println(Integer.toString(best_edge.getStatus()));
     	
