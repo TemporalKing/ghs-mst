@@ -25,6 +25,7 @@ public class ConnectMessage implements Message {
         	// Absorb
         	instance.println("Absorb " + id);
             senderEdge.setStatus(Edge.IN_MST);
+            
             instance.sendInitiate(id, instance.LN, instance.FN, instance.SN);
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
                 instance.find_count++;

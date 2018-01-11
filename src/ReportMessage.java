@@ -18,6 +18,7 @@ public class ReportMessage implements Message{
         
     	if(id != instance.in_branch) {
             instance.find_count--;
+            instance.println("Report if 1");
             if(w < instance.best_edge.getWeight()) {
             	instance.best_edge = new Edge(id, w);
             }

@@ -76,8 +76,8 @@ public class Edge {
 				minEdge = e;
 			}
 		}
-		if (minEdge.getWeight() == Integer.MAX_VALUE)
-			return null;
+//		if (minEdge.getWeight() == Integer.MAX_VALUE)
+//			return null;
 		return minEdge;
 	}
 	

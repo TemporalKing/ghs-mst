@@ -103,7 +103,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
                 @Override
                 public void run() {
                     try {
-                    	Thread.sleep((int)(Math.random()*2000));
+                    	Thread.sleep((int)(Math.random()*4000));
                         dest.receiveMessage(m);
                     } catch (RemoteException | InterruptedException e) {
                         e.printStackTrace();
@@ -168,7 +168,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void test() {
-        if(Edge.getMWOE(edges) != null) {
+        if(Edge.getMWOE(edges).getWeight() != Integer.MAX_VALUE) {
             test_edge = Edge.getMWOE(edges).getDst();
             sendTest(test_edge, LN, FN);
         } else {
@@ -178,7 +178,8 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-    	
+    	println("fc: " + find_count);
+    	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
             sendReport(in_branch, best_edge.getWeight());
@@ -188,14 +189,20 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     
     public void change_root() {
     	println("Change Root");
-    	Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
-        if(my_best_edge.getStatus() == Edge.IN_MST) {
-            sendChangeRoot(my_best_edge.getDst());
-        } else {
-            sendConnect(my_best_edge.getDst(), LN);
-            Edge.getEdge(edges, my_best_edge.getDst()).setStatus(Edge.IN_MST);
-//            best_edge.setStatus(Edge.IN_MST);
-        }
+    	
+		println("BEST_EDGE: " + best_edge.getDst());
+		println("Edges len: " + edges.size());
+//		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
+		
+		if(best_edge.getStatus() == Edge.IN_MST) {
+		    sendChangeRoot(best_edge.getDst());
+		} else {
+		    sendConnect(best_edge.getDst(), LN);
+		    Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
+		    best_edge.setStatus(Edge.IN_MST);
+		}
+		
+    	
     }
     
     public void print_in_branches() {
@@ -220,25 +227,28 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     	}
     }
     
-    public void check_queue()
+    public synchronized void check_queue()
     {
     	// Check queue
     	int queue_size = message_queue.size();
-    
+    	
     	for (int i = 0; i < queue_size; i++)
     	{
-    		Message m = message_queue.remove();
-    		Edge sourceEdge = Edge.getEdge(edges, m.getId());
-        	if (sourceEdge.getLastReceived()+1 >= m.getMessageCounter())
-        	{
-        		m.execute(this);
-        		if (sourceEdge.getLastReceived()+1 == m.getMessageCounter())
-        			sourceEdge.incrementLastReceived();
-        	}
-        	else
-        	{
-        		message_queue.add(m);
-        	}
+    		if (message_queue.size() != 0)
+    		{
+	    		Message m = message_queue.remove();
+	    		Edge sourceEdge = Edge.getEdge(edges, m.getId());
+	        	if (sourceEdge.getLastReceived()+1 >= m.getMessageCounter())
+	        	{
+	        		m.execute(this);
+	        		if (sourceEdge.getLastReceived()+1 == m.getMessageCounter())
+	        			sourceEdge.incrementLastReceived();
+	        	}
+	        	else
+	        	{
+	        		message_queue.add(m);
+	        	}
+    		}
     	}
     }
         
