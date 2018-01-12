@@ -179,7 +179,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-    	println("fc: " + find_count);
+//    	println("fc: " + find_count);
 //    	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
