@@ -27,8 +27,8 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     private int test_count = 0;
     
     
-    public int id; //TODO
-    private HashMap<Integer, String> ip_LUT;
+    public int id;
+    private HashMap<Integer, String> ip_LUT; //ip lookup table
     
     protected int LN; //Level of the current fragment it is part of
     protected int FN; //Name of the current fragment it is part of
@@ -87,8 +87,6 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     private void sendMessage(int destination, Message m) {
-//        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
-    	
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
         
         Edge destEdge = Edge.getEdge(edges, destination);
@@ -104,7 +102,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
                 @Override
                 public void run() {
                     try {
-                    	Thread.sleep((int)(Math.random()*1000));
+                    	Thread.sleep((int)(Math.random()*4000));
                         dest.receiveMessage(m);
                     } catch (RemoteException | InterruptedException e) {
                         e.printStackTrace();
@@ -179,8 +177,6 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-//    	println("fc: " + find_count);
-//    	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
             while(report_count < init_count_received) {
@@ -207,7 +203,6 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void print_in_branches() {
-        //TODO
     	synchronized(System.err){
     		println("*******************************");
     		println("Node " + id);

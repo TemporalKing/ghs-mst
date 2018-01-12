@@ -29,7 +29,7 @@ public class InitiateMessage implements Message {
         instance.init_count_received++;
         
         instance.best_edge = new Edge(Edge.EDGE_NIL, Integer.MAX_VALUE);
-        //instance.find_count=0;
+
         for (Edge adjacent_edge : instance.edges) {
             if(adjacent_edge.getDst() != instance.in_branch && adjacent_edge.getStatus() == Edge.IN_MST) {
                 instance.sendInitiate(adjacent_edge.getDst(), L, F, S);
