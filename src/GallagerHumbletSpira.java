@@ -86,7 +86,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     private void sendMessage(int destination, Message m) {
-//        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
+        println(String.format("Level %d, Fragment Name %d, Status %d, In branch %d", LN, FN, SN, in_branch));
     	
         String destName = "//" + ip_LUT.get(destination) + ":1099/" + naming + destination;
         
@@ -103,7 +103,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
                 @Override
                 public void run() {
                     try {
-                    	Thread.sleep((int)(Math.random()*4000));
+                    	Thread.sleep((int)(Math.random()*000));
                         dest.receiveMessage(m);
                     } catch (RemoteException | InterruptedException e) {
                         e.printStackTrace();
@@ -159,8 +159,9 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     
     public void wakeUp() {        
     	println("Woke up");
-        int min_edge_dst = Edge.getMWOE(edges).getDst();
-        Edge.getMWOE(edges).setStatus(Edge.IN_MST);
+    	Edge mwoe = Edge.getMWOE(edges);
+        int min_edge_dst = mwoe.getDst();
+    	mwoe.setStatus(Edge.IN_MST);
         LN = 0;
         SN = STATUS_FOUND;
         find_count = 0;
@@ -178,7 +179,6 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-    	println("fc: " + find_count);
     	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
@@ -192,14 +192,14 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     	
 		println("BEST_EDGE: " + best_edge.getDst());
 		println("Edges len: " + edges.size());
-//		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
+		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
 		
-		if(best_edge.getStatus() == Edge.IN_MST) {
+		if(my_best_edge.getStatus() == Edge.IN_MST) {
 		    sendChangeRoot(best_edge.getDst());
 		} else {
 		    sendConnect(best_edge.getDst(), LN);
 		    Edge.getEdge(edges, best_edge.getDst()).setStatus(Edge.IN_MST);
-		    best_edge.setStatus(Edge.IN_MST);
+//		    best_edge.setStatus(Edge.IN_MST);
 		}
 		
     	

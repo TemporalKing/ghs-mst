@@ -24,17 +24,18 @@ public class InitiateMessage implements Message {
         instance.FN = F;
         instance.SN = S;
         instance.in_branch = id;
+//        Edge.getEdge(instance.edges, id).setStatus(Edge.IN_MST);
         instance.LN = L;
         instance.check_queue();
         
         instance.best_edge = new Edge(Edge.EDGE_NIL, Integer.MAX_VALUE);
-        instance.find_count=0;
         for (Edge adjacent_edge : instance.edges)
         {
             if(adjacent_edge.getDst() != instance.in_branch && adjacent_edge.getStatus() == Edge.IN_MST) {
                 instance.sendInitiate(adjacent_edge.getDst(), L, F, S);
                 if (S == GallagerHumbletSpira.STATUS_FIND) {
                     instance.find_count++;
+                    instance.println("fc - init: " + instance.find_count + " adjacent_edge.getDst(): " +adjacent_edge.getDst() + " id: " + id);
                 }
             }
         }
@@ -43,7 +44,7 @@ public class InitiateMessage implements Message {
             instance.test();
         }
         
-        System.out.println(String.format("Level %d, Fragment Name %d", instance.LN, instance.FN));
+//        instance.println(String.format("Level %d, Fragment Name %d", instance.LN, instance.FN));
     }
     
     @Override

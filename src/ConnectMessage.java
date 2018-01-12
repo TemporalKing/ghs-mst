@@ -27,8 +27,10 @@ public class ConnectMessage implements Message {
             senderEdge.setStatus(Edge.IN_MST);
             
             instance.sendInitiate(id, instance.LN, instance.FN, instance.SN);
+            // Add to the current search
             if(instance.SN == GallagerHumbletSpira.STATUS_FIND) {
                 instance.find_count++;
+                instance.println("fc - connect: " + instance.find_count);
             }
         } else {
             if(senderEdge.getStatus() == Edge.UNKNOWN) {
@@ -36,8 +38,11 @@ public class ConnectMessage implements Message {
                 instance.message_queue.add(this);
             } else {
             	// Merge
-            	instance.println("Merge " + id);
-                instance.sendInitiate(id, instance.LN + 1, senderEdge.getWeight(), GallagerHumbletSpira.STATUS_FIND);
+//            	if (Edge.getEdge(instance.edges, id).getStatus() != Edge.IN_MST) // ADDED
+            	{
+	            	instance.println("Merge " + id);
+	                instance.sendInitiate(id, instance.LN + 1, senderEdge.getWeight(), GallagerHumbletSpira.STATUS_FIND);
+            	}
             }
         }
     }
