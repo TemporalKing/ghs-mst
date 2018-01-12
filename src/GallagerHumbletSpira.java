@@ -37,6 +37,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     protected int test_edge; //ID of edge checked whether other end in same fragment
     protected Edge best_edge; // candidate for MWOE
     protected int find_count; //Number of report messages expected
+    protected int init_count_received; //Number of init messages received.
     
     protected Queue<Message> message_queue; //Message queue
     
@@ -103,7 +104,7 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
                 @Override
                 public void run() {
                     try {
-                    	Thread.sleep((int)(Math.random()*4000));
+                    	Thread.sleep((int)(Math.random()*1000));
                         dest.receiveMessage(m);
                     } catch (RemoteException | InterruptedException e) {
                         e.printStackTrace();
@@ -178,37 +179,31 @@ public class GallagerHumbletSpira extends UnicastRemoteObject implements Gallage
     }
     
     public void report() {
-//    	println("fc: " + find_count);
+    	println("fc: " + find_count);
 //    	println("test_edge: " + test_edge);
     	if(find_count == 0 && test_edge == Edge.EDGE_NIL) {
             SN = STATUS_FOUND;
-            sendReport(in_branch, best_edge.getWeight());
-            check_queue();
+            while(report_count < init_count_received) {
+                sendReport(in_branch, best_edge.getWeight());
+            }
         }
+    	check_queue();
     }
     
     public void change_root() {
     	println("Change Root");
     	
-//		println("BEST_EDGE: " + best_edge.getDst());
-//		println("Edges len: " + edges.size());
-//		Edge my_best_edge = Edge.getEdge(edges, best_edge.getDst());
     	Edge temp = Edge.getEdge(edges, best_edge.getDst());
-    	if (temp == null) {
-    		println("Best edge dest:" + best_edge.getDst());
-    	}
-//    	println(best_edge.toString());
-//    	println(Integer.toString(best_edge.getStatus()));
-    	
-		if(temp.getStatus() == Edge.IN_MST) {
-		    sendChangeRoot(temp.getDst());
-		} else {
-		    sendConnect(temp.getDst(), LN);
-		    Edge.getEdge(edges, temp.getDst()).setStatus(Edge.IN_MST);
-		    temp.setStatus(Edge.IN_MST);
-		}
-		
-    	
+
+    	if (temp != null) {
+    		if(temp.getStatus() == Edge.IN_MST) {
+    		    sendChangeRoot(temp.getDst());
+    		} else {
+    		    sendConnect(temp.getDst(), LN);
+    		    Edge.getEdge(edges, temp.getDst()).setStatus(Edge.IN_MST);
+    		    temp.setStatus(Edge.IN_MST);
+    		}
+    	}    	
     }
     
     public void print_in_branches() {

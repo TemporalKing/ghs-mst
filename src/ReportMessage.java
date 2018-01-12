@@ -29,6 +29,7 @@ public class ReportMessage implements Message{
                 instance.message_queue.add(this);
             } else {
                 if(w > instance.best_edge.getWeight()) {
+                    instance.println("w: " + w);
                     instance.change_root();
                 } else {
                     if(w == instance.best_edge.getWeight() && w == Integer.MAX_VALUE) {
